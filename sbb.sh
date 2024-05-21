@@ -174,7 +174,15 @@ while getopts ":t:d:v:aiV" o; do
     case "${o}" in
         t)
             timestamp_raw=${OPTARG}
-            timestamp=$(date -d $timestamp_raw +"%H:%M")
+            timestamp=""
+	    if [[ "$os" = Linux ]]; then
+	    	timestamp=$(date -d $timestamp_raw +"%H:%M")
+     	    elif [[ "$os" = "macOS" ]]; then
+	    	timestamp=$(date -j -f "%H:%M" $timestamp_raw +"%H:%M")
+     	    else
+	  	echo "Unknown OS"
+    		exit 1
+      	    fi
             ;;
         d)
             datestamp_raw=${OPTARG}
